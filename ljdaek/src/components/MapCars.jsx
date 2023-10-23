@@ -1,11 +1,11 @@
-const MapCars = ({shownCars}) => {
+import Car from "./Car"
+
+const MapCars = ({shownCars, shownCustomers}) => {
     return (
         <>
             {shownCars?.map((data, i) => {
                 return(
-                    <div key={i}>
-                        <h1>{data?.reg}</h1>
-                    </div>
+                    <Car car={data} key={i} owner={shownCustomers.find(x => x.id == data.customerId)}/>
                 )
             })}
         </>

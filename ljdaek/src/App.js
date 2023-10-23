@@ -7,6 +7,9 @@ import CustomerAddLogo from './images/customerAdd.svg'
 import RegNumberLogo from './images/regnumber.svg'
 import InvoiceLogo from './images/invoice.svg'
 import SearchedBox from "./components/SearchedBox";
+import Modal from 'react-modal';
+import Styles from "./styling/appStyles"
+import CloseSquare from "./images/closesquare.svg"
 
 export default function App() {
 
@@ -14,17 +17,33 @@ export default function App() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [loading, setLoading] = useState(true)
 
+    const [name, setName] = useState("")
+    const [phone, setPhone] = useState("")
+    const [email, setEmail] = useState("")
+    const [address, setAddress] = useState("")
     const [originalCars, setOriginalCars] = useState([])
     const [originalCustomers, setOriginalCustomers] = useState([])
     const [originalOrders, setOriginalOrders] = useState([])
+    const [originalMotorcycles, setOriginalMotorcycles] = useState([])
     const [shownCustomers, setShownCustomers] = useState([])
+    const [shownMotorcycles, setShownMotorcycles] = useState([])
     const [shownCars, setShownCars] = useState([])
     const [shownOrders, setShownOrders] = useState([])
     const [currentFiltered, setCurrentFiltered] = useState("")
     const [lastFiltered, setLastFiltered] = useState("")
+    const [isOpen, setIsOpen] = useState(false)
     const [buttons, setButtons] = useState([
         {value: "Customer", image: CustomerLogo}, {value: "Reg", image: RegNumberLogo}, {value: "Order", image: InvoiceLogo}
     ])
+
+    const OpenModal = () => {
+        setIsOpen(true);
+    }
+
+    const CloseModal = () => {
+        setIsOpen(false)
+        ClearData()
+    }
 
     const getCustomers = () => {
         fetch("http://192.168.1.232:5000/api/customer")
@@ -44,6 +63,15 @@ export default function App() {
         })
     }
 
+    const getMotorcycles = () => {
+        fetch("http://192.168.1.232:5000/api/motorcycle")
+        .then(res => res.json())
+        .then((json) => {
+            setOriginalMotorcycles(json)
+            setShownMotorcycles(json)
+        })
+    }
+
     const getOrders = () => {
         fetch("http://192.168.1.232:5000/api/order")
         .then(res => res.json())
@@ -56,6 +84,7 @@ export default function App() {
     const getData = () => {
         getCustomers()
         getCars()
+        getMotorcycles()
         getOrders()
     }
 
@@ -67,7 +96,9 @@ export default function App() {
         if(text && text.length > 0) {
             setShownCars(tempCars.filter((x) => {
                 let reg = x?.reg?.toLowerCase()
-                return reg?.includes(text.toLowerCase())
+                let model = x?.model?.toLowerCase()
+                let owner = x?.customerId
+                return reg?.includes(text.toLowerCase()) || model?.includes(text.toLowerCase()) || owner == tempCustomers.filter(x => x?.id == owner && x?.name.toLowerCase()?.includes(text?.toLowerCase()))[0]?.id
             }))
             setShownCustomers(tempCustomers.filter((x) => {
                 let name = x?.name?.toLowerCase()
@@ -75,7 +106,8 @@ export default function App() {
             }))
             setShownOrders(tempOrders.filter((x) => {
                 let number = x?.number?.toLowerCase()
-                return number?.includes(text.toLowerCase())
+                let owner = x?.customerId
+                return number?.includes(text.toLowerCase()) ||  owner == tempCustomers.filter(x => x?.id == owner && x?.name.toLowerCase()?.includes(text?.toLowerCase()))[0]?.id
             }))
         } else {
             setShownCars([...originalCars])
@@ -85,9 +117,9 @@ export default function App() {
     }
 
     const FilterClick = (buttonClicked) => {
-        if (currentFiltered === "") {
-            if(lastFiltered === buttonClicked) {
-                setCurrentFiltered("")
+        if (currentFiltered == "") {
+            if(lastFiltered == buttonClicked) {
+                setCurrentFiltered(buttonClicked)
             } else {
                 setCurrentFiltered(buttonClicked)
             }
@@ -100,6 +132,49 @@ export default function App() {
         }
         setLastFiltered(buttonClicked)
     }
+
+    const ClearData = () => {
+        setName("")
+        setPhone("")
+        setEmail("")
+        setAddress("")
+    }
+
+    const HandleSubmit = (event) => {
+        event.preventDefault()
+        if (name.length <= 0 || phone.length <= 0) {
+            alert("Du skal indtaste navn og telefonnummer")
+            return
+        }
+        var tempCustomer = {
+            name: name,
+            phone: phone,
+            email: email,
+            address: address
+        }
+        console.log(tempCustomer)
+        fetch("http://192.168.1.232:5000/api/customer", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(tempCustomer)
+        })
+        .then(res => res.json())
+        .then((json) => {
+            setOriginalCustomers(json)
+            setShownCustomers(json)
+            CloseModal()
+            ClearData()
+        })
+    }
+
+    const NumberCheck = (e) => {
+        const re = /^[0-9\b]+$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+           setPhone(e.target.value)
+        } else {
+            alert("Du kan kun indtaste tal")
+        }
+     }
 
     useEffect(() => {
         var check = cookies.pwd
@@ -147,15 +222,16 @@ export default function App() {
                             display: "flex",
                             width: "25%"
                         }}>
-                            <div style={{
+                            <button style={{
                                 display: "flex",
                                 background: "#f2892d",
                                 justifyContent: "center",
                                 alignItems: "center",
                                 height: "7vw",
                                 aspectRatio: "1",
-                                borderRadius: "8px"
-                            }}>
+                                borderRadius: "8px",
+                                border: 0
+                            }} onClick={OpenModal}>
                                 <img
                                     src={CustomerAddLogo}
                                     alt="Logo"
@@ -164,7 +240,7 @@ export default function App() {
                                         height: "100%"
                                     }}
                                 />
-                            </div>
+                            </button>
                         </div>
                         <div style={{
                             display: "flex",
@@ -221,8 +297,83 @@ export default function App() {
                             })}
                         </div>
                     </div>
-                    <SearchedBox shownCustomers={shownCustomers} shownCars={shownCars} shownOrders={shownOrders} currentFiltered={currentFiltered}/>
+                    <SearchedBox shownCustomers={shownCustomers} shownCars={shownCars} shownOrders={shownOrders} currentFiltered={currentFiltered} shownMotorcycles={shownMotorcycles}/>
                 </div>
+                <Modal
+                    isOpen={isOpen}
+                    onRequestClose={CloseModal}
+                    style={{
+                        overlay: {...Styles.modalOverlay},
+                        content: {...Styles.modal}
+                    }}
+                    ariaHideApp={false}
+                >
+                    <div style={Styles.modalContainer}>
+                        <button 
+                            style={Styles.modalCloseButton}
+                        >
+                            <img 
+                                src={CloseSquare} 
+                                alt="Close" 
+                                style={Styles.modalCloseButtonImage} 
+                                onClick={CloseModal}
+                            />
+                        </button>
+                        <h1 style={Styles.modalHeader}>Opret Kunde</h1>
+                        <form 
+                            onSubmit={HandleSubmit}
+                            style={Styles.formContainer}
+                        >
+                            <input 
+                                type="text" 
+                                name="name" 
+                                value={name} 
+                                onChange={
+                                    e => setName(e.target.value)
+                                } 
+                                placeholder="Navn"
+                                style={Styles.modalInput}
+                                autoFocus
+                            />
+                            <input 
+                                type="text" 
+                                name="tlf" 
+                                value={phone} 
+                                onChange={
+                                    e => (NumberCheck(e))
+                                } 
+                                maxLength={8} 
+                                placeholder="Telefonnummer"
+                                style={Styles.modalInput}
+                            />
+                            <input 
+                                type="text" 
+                                name="email" 
+                                value={email} 
+                                onChange={
+                                    e => setEmail(e.target.value)
+                                } 
+                                placeholder="Email"
+                                style={Styles.modalInput}
+                            />
+                            <input 
+                                type="text"
+                                name="address" 
+                                value={address} 
+                                onChange={
+                                    e => setAddress(e.target.value)
+                                } 
+                                placeholder="Addresse"
+                                style={Styles.modalInput}
+                            />
+                            <input 
+                                type="submit" 
+                                value="Opret Kunde"
+                                style={Styles.modalSubmit}
+                            />
+                        </form>
+                    </div>
+                </Modal>
             </>
         );
     }
