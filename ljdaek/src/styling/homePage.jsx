@@ -8,7 +8,8 @@ const styles = {
         marginTop: "1vw",
         marginBottom: "1vw",
         overflow: "hidden",
-        boxShadow: "-0px -0px 10px 3px rgb(160, 160, 160)"
+        boxShadow: "-0px -0px 10px 3px rgb(160, 160, 160)",
+        fontFamily: "monospace"
     },
     shortItem: {
         display: "flex",
@@ -61,6 +62,14 @@ const styles = {
         margin: 0,
         alignItems: "center",
         height: "100%"
+    },
+    customerButton: {
+        display: "flex",
+        border: 0,
+        padding: 0,
+        width: "100%",
+        justifyContent: "center",
+        backgroundColor: "white"
     }
 }
 

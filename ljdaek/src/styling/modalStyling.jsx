@@ -7,7 +7,6 @@ const Styles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         width: "80vw",
-        height: "40vw",
         border: "1px solid gray",
         borderRadius: "8px",
         backgroundColor: "#f2892d",
@@ -46,7 +45,7 @@ const Styles = {
         alignItems: "center",
         width: "100%",
         height: "100%",
-        backgroundColor: "rgb(230, 230, 230)",
+        backgroundColor: "rgb(240, 240, 240)",
         borderRadius: "8px",
         boxShadow: "inset 0 0 20px 10px rgba(150, 150, 150, 0.5)"
     },
@@ -69,6 +68,15 @@ const Styles = {
         padding: 0,
         boxShadow: "inset 0 0 5px 0px rgba(150, 150, 150, 0.5)"
     },
+    modalCheckBoxInput: {
+        display: "flex",
+        justifyContent: "space-around",
+        height: "3.5vw",
+        borderRadius: "8px",
+        border: "2px solid #f2892d",
+        padding: 0,
+        boxShadow: "inset 0 0 5px 0px rgba(150, 150, 150, 0.5)",
+    },
     modalSubmit: {
         width: "100%",
         height: "7vw",
@@ -78,7 +86,24 @@ const Styles = {
         backgroundColor: "#f2892d",
         fontSize: "4vw",
         color: "white",
-        textShadow: "-2px 0 rgb(239 121 17), 0 2px rgb(239 121 17), 2px 0 rgb(239 121 17), 0 -2px rgb(239 121 17)"
+        textShadow: "-2px 0 rgb(239 121 17), 0 2px rgb(239 121 17), 2px 0 rgb(239 121 17), 0 -2px rgb(239 121 17)",
+        marginBottom: "1vw"
+    },
+    checkBox: {
+        height: "80%",
+        margin: 0,
+        aspectRatio: "1"
+    },
+    checkBoxPair: {
+        display: "flex",
+        width: "20%",
+        gap: "0.5vw",
+        alignItems: "center"
+    },
+    checkBoxLabel: {
+        display: "flex",
+        fontSize: "2vw",
+        justifyContent: "center"
     }
 }
 

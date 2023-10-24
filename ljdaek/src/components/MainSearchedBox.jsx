@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react"
-import MapCustomers from "./MapCustomers"
-import MapCars from "./MapCars"
-import MapOrders from "./MapOrders"
-import MapAll from "./MapAll"
-import MapMotorcycles from "./MapMotorcycles"
+import React from "react"
+import MapCustomers from "./Homepage/MapCustomers"
+import MapCars from "./Homepage/MapCars"
+import MapOrders from "./Homepage/MapOrders"
+import MapAll from "./Homepage/MapAll"
+import MapMotorcycles from "./Homepage/MapMotorcycles"
 
-const SearchedBox = ({shownCustomers, shownCars, shownOrders, shownMotorcycles, currentFiltered}) => {
+const MainSearchBox = ({shownCustomers, shownCars, shownOrders, shownMotorcycles, currentFiltered}) => {
     
     return (
         <div style={{
@@ -34,4 +34,4 @@ const SearchedBox = ({shownCustomers, shownCars, shownOrders, shownMotorcycles, 
     )
 }
 
-export default SearchedBox;
+export default MainSearchBox;

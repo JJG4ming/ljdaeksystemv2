@@ -1,11 +1,11 @@
 import Customer from "./Customer"
 
-const MapCustomers = ({shownCustomers}) => {
+const MapCustomers = ({shownCustomers, HandleCustomerClick}) => {
     return (
         <>
             {shownCustomers?.map((data, i) => {
                 return(
-                    <Customer customer={data} key={i}/>
+                    <Customer customer={data} key={i} HandleCustomerClick={HandleCustomerClick}/>
                 )
             })}
         </>

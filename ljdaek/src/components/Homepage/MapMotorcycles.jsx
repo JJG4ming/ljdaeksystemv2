@@ -1,11 +1,11 @@
 import Motorcycle from "./Motorcycle"
 
-const MapMotorcycles = ({shownMotorcycles}) => {
+const MapMotorcycles = ({shownMotorcycles, shownCustomers}) => {
     return (
         <>
             {shownMotorcycles?.map((data, i) => {
                 return(
-                    <Motorcycle motorcycle={data} key={i}/>
+                    <Motorcycle motorcycle={data} key={i} owner={shownCustomers.find(x => x.id == data.customerId)}/>
                 )
             })}
         </>

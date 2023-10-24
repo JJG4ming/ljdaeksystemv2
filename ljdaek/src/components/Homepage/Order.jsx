@@ -1,5 +1,5 @@
-import styles from "../styling/itemStyling.jsx"
-import OrderLogo from "../images/invoice.svg"
+import styles from "../../styling/homePage.jsx"
+import OrderLogo from "../../images/invoice.svg"
 
 const Order = ({order}) => {
     return(

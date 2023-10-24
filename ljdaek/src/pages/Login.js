@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import bcrypt from 'bcryptjs'
 
-export default function Login(props) {
+export default function Login() {
 
     const [cookies, setCookie] = useCookies(['pwd']);
     const [input, setInput] = useState("")
@@ -22,6 +22,7 @@ export default function Login(props) {
                     if (json[i].password == bcrypt.hashSync(input, '$2a$10$CwTycUXWue0Thq9StjUM0u')) {
                         setCookie("pwd", bcrypt.hashSync(input, '$2a$10$CwTycUXWue0Thq9StjUM0u'))
                         navigate("/")
+                        window.location.reload(false);
                     } else {
                         console.log("Fail")
                     }
