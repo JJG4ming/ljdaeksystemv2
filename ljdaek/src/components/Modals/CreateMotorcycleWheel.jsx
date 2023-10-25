@@ -1,10 +1,12 @@
 import Modal from 'react-modal';
 import Styles from "../../styling/modalStyling"
 import CloseSquare from "../../images/closesquare.svg"
+import { useCookies } from "react-cookie";
 import { useState } from 'react';
 
 const CreateMotorcycleWheel = ({isOpen, setIsOpen, setOriginalWheels, setShownWheels, motorcycle, wheelData, setWheelData}) => {
 
+    const [cookies] = useCookies(['token']);
     const CloseModal = () => {
         setIsOpen(false)
         ClearData()
@@ -33,8 +35,11 @@ const CreateMotorcycleWheel = ({isOpen, setIsOpen, setOriginalWheels, setShownWh
         console.log(tempWheel)
         fetch("http://192.168.1.232:5000/api/motorcycleWheel", {
             method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(tempWheel)
+            headers: { 
+                'Content-Type': 'application/json',
+                authorization: cookies?.token 
+            },
+            body: JSON.stringify(tempWheel),
         })
         .then(res => res.json())
         .then((json) => {

@@ -1,12 +1,19 @@
 import React from "react"
 import styles from "../styling/carPage"
-import MapWheels from "./Car/MapWheels"
+import MapCarWheels from "./Car/MapWheels"
+import MapMotorcycleWheels from "./Motorcycle/MapWheels"
 
-const WheelSearchBox = ({shownWheels}) => {
+const WheelSearchBox = ({shownWheels, type}) => {
     
     return (
         <div style={styles.pageSearchBox}>
-            <MapWheels shownWheels={shownWheels}/>
+            {
+                type == "Car" ?
+            <MapCarWheels shownWheels={shownWheels}/>
+            : type == "Motorcycle" ?
+            <MapMotorcycleWheels shownWheels={shownWheels}/>
+            : <></>
+            }
         </div>
     )
 }

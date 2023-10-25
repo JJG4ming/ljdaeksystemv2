@@ -1,10 +1,12 @@
 import Modal from 'react-modal';
 import Styles from "../../styling/modalStyling"
 import CloseSquare from "../../images/closesquare.svg"
+import { useCookies } from "react-cookie";
 import { useState } from 'react';
 
 const CreateCar = ({isOpen, setIsOpen, setOriginalCars, setShownCars, customer, carData, setCarData}) => {
 
+    const [cookies, setCookie] = useCookies(['token']);
     const CloseModal = () => {
         setIsOpen(
             {
@@ -35,8 +37,12 @@ const CreateCar = ({isOpen, setIsOpen, setOriginalCars, setShownCars, customer, 
         }
         fetch("http://192.168.1.232:5000/api/car", {
             method: "POST",
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                authorization: cookies?.token 
+            },
             body: JSON.stringify(tempCar)
+            
         })
         .then(res => res.json())
         .then((json) => {

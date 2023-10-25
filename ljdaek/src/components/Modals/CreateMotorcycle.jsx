@@ -1,10 +1,12 @@
 import Modal from 'react-modal';
 import Styles from "../../styling/modalStyling"
 import CloseSquare from "../../images/closesquare.svg"
+import { useCookies } from "react-cookie";
 import { useState } from 'react';
 
 const CreateMotorcycle = ({isOpen, setIsOpen, setOriginalMotorcycles, setShownMotorcycles, customer, motorcycleData, setMotorcycleData}) => {
 
+    const [cookies] = useCookies(['token']);
     const CloseModal = () => {
         setIsOpen(
             {
@@ -37,8 +39,11 @@ const CreateMotorcycle = ({isOpen, setIsOpen, setOriginalMotorcycles, setShownMo
         }
         fetch("http://192.168.1.232:5000/api/motorcycle", {
             method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(tempMotorcycle)
+            headers: { 
+                'Content-Type': 'application/json',
+                authorization: cookies?.token 
+            },
+            body: JSON.stringify(tempMotorcycle),
         })
         .then(res => res.json())
         .then((json) => {

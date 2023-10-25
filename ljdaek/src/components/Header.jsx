@@ -5,7 +5,7 @@ import Logo from '../images/logo.png'
 
 const Header = () => {
     const [title, setTitle] = useState()
-    const [cookies, setCookie, removeCookie] = useCookies(["pwd"]);
+    const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
     const HandleNavClick = function(event, stage, text) {
         event.preventDefault();
@@ -13,7 +13,7 @@ const Header = () => {
     }
 
     const Logout = () => {
-        removeCookie("pwd")
+        removeCookie("token")
     }
 
   return (   
@@ -26,8 +26,20 @@ const Header = () => {
             height: "70px"
         }}>
             <img src={Logo} alt="Logo" style={{height: "100%", marginLeft: "1vw", marginBottom: "4px"}} />
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/appointments">Appointments</Link></li>
+            <li style={{
+                display: "flex",
+                fontSize: "2vw"
+            }}><Link to="/" style={{
+                textDecoration: "none",
+                color: "black"
+            }}>Home</Link></li>
+            <li style={{
+                display: "flex",
+                fontSize: "2vw"
+            }}><Link to="/appointments" style={{
+                textDecoration: "none",
+                color: "black"
+            }}>Appointments</Link></li>
             <li style={{
                 fontSize: "calc(6px + 1vw)", 
                 cursor: "pointer", 

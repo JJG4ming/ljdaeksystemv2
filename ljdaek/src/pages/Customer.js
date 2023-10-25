@@ -1,6 +1,7 @@
 import { Navigate, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react";
 import styles from "../styling/customerPage"
+import { useCookies } from "react-cookie";
 import Header from "../components/Header";
 import CustomerSearchBox from "../components/CustomerSearchBox"
 import OrderLogo from "../images/invoice.svg"
@@ -14,6 +15,7 @@ import CreateOrder from "../components/Modals/CreateOrder";
 const Customer = ({loggedIn}) => {
     
     const [customer, setCustomer] = useState({})
+    const [cookies] = useCookies(['token']);
     const [carData, setCarData] = useState(
         {
             reg: "",
@@ -83,11 +85,21 @@ const Customer = ({loggedIn}) => {
 
         const id = path.split("/").pop();
 
-        fetch("http://192.168.1.232:5000/api/customer/" + id)
-        .then(res => res.json())
-        .then((json) => {
-            if (!json) navigate("../../")
-            SetData(json)
+        fetch("http://192.168.1.232:5000/api/customer/" + id, {
+            headers: {
+                authorization: cookies?.token
+            }
+        })
+        .then(res => {
+            if (res.status == 401) {
+                navigate("../../login")
+                window.location.href = ""
+            } else {
+                res.json()
+                .then((json) => {
+                    SetData(json)
+                })
+            }
         })
     }
 
@@ -147,7 +159,7 @@ const Customer = ({loggedIn}) => {
 
     useEffect(() => {
         if (!loggedIn) {
-            navigate("../login")
+            navigate("../../login")
         } else {
             GetData()
         }
@@ -156,7 +168,7 @@ const Customer = ({loggedIn}) => {
     const [state, setState] = useState({img: MotorcycleLogo})
     
     if (!loggedIn) {
-        return <Navigate replace to="../login" />;
+        return <Navigate replace to="../../login" />;
     } else {
         return (
             <>

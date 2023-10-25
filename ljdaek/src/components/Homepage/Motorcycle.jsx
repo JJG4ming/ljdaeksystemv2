@@ -14,7 +14,7 @@ const Car = ({motorcycle, owner}) => {
                 </div>
                 <div style={styles.shortItem}>
                     <h1 style={styles.header}>Navn</h1>
-                    <h1 style={styles.data}>{owner?.name}</h1>
+                    <h1 style={styles.data}>{owner?.name ? owner.name : "Navn"}</h1>
                 </div>
                 <div style={styles.shortItem}>
                     <h1 style={styles.header}>Nummerplade</h1>

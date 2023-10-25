@@ -8,10 +8,12 @@ import InvoiceLogo from '../images/invoice.svg'
 import MainSearchBox from "../components/MainSearchedBox";
 import Modal from 'react-modal';
 import Styles from "../styling/modalStyling"
+import { useCookies } from "react-cookie";
 import CloseSquare from "../images/closesquare.svg"
 
 const Homepage = ({loggedIn}) => {
     const [name, setName] = useState("")
+    const [cookies, setCookie] = useCookies(['token']);
     const [phone, setPhone] = useState("")
     const [email, setEmail] = useState("")
     const [address, setAddress] = useState("")
@@ -41,38 +43,82 @@ const Homepage = ({loggedIn}) => {
     }
 
     const getCustomers = () => {
-        fetch("http://192.168.1.232:5000/api/customer")
-        .then(res => res.json())
-        .then((json) => {
-            setOriginalCustomers(json)
-            setShownCustomers(json)
+        fetch("http://192.168.1.232:5000/api/customer", {
+            headers: {
+                authorization: cookies?.token
+            }
+        })
+        .then(res => {
+            if (res.status == 401) {
+                navigate("../../login")
+                window.location.href = ""
+            } else {
+                res.json()
+                .then((json) => {
+                    setOriginalCustomers(json)
+                    setShownCustomers(json)
+                })
+            }
         })
     }
 
     const getCars = () => {
-        fetch("http://192.168.1.232:5000/api/car")
-        .then(res => res.json())
-        .then((json) => {
-            setOriginalCars(json)
-            setShownCars(json)
+        fetch("http://192.168.1.232:5000/api/car", {
+            headers: {
+                authorization: cookies?.token
+            }
+        })
+        .then(res => {
+            if (res.status == 401) {
+                navigate("../../login")
+                window.location.href = ""
+            } else {
+                res.json()
+                .then((json) => {
+                    setOriginalCars(json)
+                    setShownCars(json)
+                })
+            }
         })
     }
 
     const getMotorcycles = () => {
-        fetch("http://192.168.1.232:5000/api/motorcycle")
-        .then(res => res.json())
-        .then((json) => {
-            setOriginalMotorcycles(json)
-            setShownMotorcycles(json)
+        fetch("http://192.168.1.232:5000/api/motorcycle", {
+            headers: {
+                authorization: cookies?.token
+            }
+        })
+        .then(res => {
+            if (res.status == 401) {
+                navigate("../../login")
+                window.location.href = ""
+            } else {
+                res.json()
+                .then((json) => {
+                    setOriginalMotorcycles(json)
+                    setShownMotorcycles(json)
+                })
+            }
         })
     }
 
     const getOrders = () => {
-        fetch("http://192.168.1.232:5000/api/order")
-        .then(res => res.json())
-        .then((json) => {
-            setOriginalOrders(json)
-            setShownOrders(json)
+        fetch("http://192.168.1.232:5000/api/order", {
+            headers: {
+                authorization: cookies?.token
+            }
+        })
+        .then(res => {
+            if (res.status == 401) {
+                navigate("../../login")
+                window.location.href = ""
+            } else {
+                res.json()
+                .then((json) => {
+                    setOriginalOrders(json)
+                    setShownOrders(json)
+                })
+            }
         })
     }
 
@@ -104,7 +150,8 @@ const Homepage = ({loggedIn}) => {
             }))
             setShownCustomers(tempCustomers.filter((x) => {
                 let name = x?.name?.toLowerCase()
-                return name?.includes(text.toLowerCase())
+                let phone = x?.phone?.toLowerCase()
+                return name?.includes(text.toLowerCase()) || phone?.includes(text.toLowerCase())
             }))
             setShownOrders(tempOrders.filter((x) => {
                 let number = x?.number?.toLowerCase()
@@ -158,7 +205,10 @@ const Homepage = ({loggedIn}) => {
         console.log(tempCustomer)
         fetch("http://192.168.1.232:5000/api/customer", {
             method: "POST",
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                authorization: cookies?.token
+            },
             body: JSON.stringify(tempCustomer)
         })
         .then(res => res.json())

@@ -1,5 +1,6 @@
 import { Navigate, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import styles from "../styling/carPage"
 import Header from "../components/Header";
 import WheelSearchBox from "../components/WheelSearchBox"
@@ -12,6 +13,7 @@ const Car = ({loggedIn}) => {
     const navigate = useNavigate()
     const [car, setCar] = useState({})
     const [originalWheels, setOriginalWheels] = useState([])
+    const [cookies, setCookie] = useCookies(['token']);
     const [shownWheels, setShownWheels] = useState([])
     const [currentFiltered, setCurrentFiltered] = useState("")
     const [lastFiltered, setLastFiltered] = useState("")
@@ -35,11 +37,22 @@ const Car = ({loggedIn}) => {
 
         const id = path.split("/").pop();
 
-        fetch("http://192.168.1.232:5000/api/car/" + id)
-        .then(res => res.json())
-        .then((json) => {
-            if (!json) navigate("../../")
-            SetData(json)
+        fetch("http://192.168.1.232:5000/api/car/" + id, {
+            headers: {
+                authorization: cookies?.token
+            }
+        })
+        .then(res => {
+            if (res.status == 401) {
+                navigate("../../login")
+                window.location.href = ""
+            } else {
+                res.json()
+                .then((json) => {
+                    if (!json) navigate("../../")
+                    SetData(json)
+                })
+            }
         })
     }
 
@@ -52,14 +65,14 @@ const Car = ({loggedIn}) => {
 
     useEffect(() => {
         if (!loggedIn) {
-            navigate("../login")
+            navigate("../../")
         } else {
             GetData()
         }
     }, [])
     
     if (!loggedIn) {
-        return <Navigate replace to="../login" />;
+        return <Navigate replace to="../../" />;
     } else {
         return (
             <>
@@ -109,7 +122,7 @@ const Car = ({loggedIn}) => {
                         </button>
                     </div>
                     <div style={styles.rightContainer}>
-                        <WheelSearchBox shownWheels={shownWheels}/>
+                        <WheelSearchBox shownWheels={shownWheels} type={"Car"}/>
                     </div>
                 </div>
                 <CreateCarWheel isOpen={isOpen} setIsOpen={setIsOpen} setOriginalWheels={setOriginalWheels} setShownWheels={setShownWheels} car={car} wheelData={wheelData} setWheelData={setWheelData}/>

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 
 export default function Login() {
 
-    const [cookies, setCookie] = useCookies(['pwd']);
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
     const [input, setInput] = useState("")
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
@@ -15,35 +15,36 @@ export default function Login() {
     }
 
     const CheckValidPassword = () => {
-        fetch("http://192.168.1.232:5000/api/user")
+        fetch("http://192.168.1.232:5000/api/auth", {
+            method: "POST",
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({pwd: input})
+        })
             .then(res => res.json())
             .then((json) => {
-                for (var i in json) {
-                    if (json[i].password == bcrypt.hashSync(input, '$2a$10$CwTycUXWue0Thq9StjUM0u')) {
-                        setCookie("pwd", bcrypt.hashSync(input, '$2a$10$CwTycUXWue0Thq9StjUM0u'))
-                        navigate("/")
-                        window.location.reload(false);
-                    } else {
-                        console.log("Fail")
-                    }
-                }
+                setCookie("token", json)
+                window.location.href = ""
             })
     }
 
     useEffect(() => {
-        var check = cookies.pwd
-        if (check) {
-            fetch("http://192.168.1.232:5000/api/user")
-            .then(res => res.json())
-            .then((json) => {
-                for (var i in json) {
-                    if (json[i].password == check) {
-                        navigate("/")
-                    } else {
-                        setLoading(!loading)
-                    }
+        var token = cookies.token
+        if (token) {
+            fetch("http://192.168.1.232:5000/api/auth", {
+                headers: {
+                    authorization: token
                 }
             })
+            .then((res) => {
+                if(!res.ok) throw new Error(res.status);
+                else {
+                    navigate("/")
+                    setLoading(!loading)
+                }
+            })
+            
         } else {
             setLoading(!loading)
         }

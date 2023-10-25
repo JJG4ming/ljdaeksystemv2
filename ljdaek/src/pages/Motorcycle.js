@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import WheelSearchBox from "../components/WheelSearchBox"
 import PlusLogo from "../images/plus.svg"
 import WheelLogo from "../images/wheel.svg"
+import { useCookies } from "react-cookie";
 import CreateMotorcycleWheel from "../components/Modals/CreateMotorcycleWheel";
 
 const Motorcycle = ({loggedIn}) => {
@@ -12,6 +13,7 @@ const Motorcycle = ({loggedIn}) => {
     const navigate = useNavigate()
     const [motorcycle, setMotorcycle] = useState({})
     const [originalWheels, setOriginalWheels] = useState([])
+    const [cookies, setCookie] = useCookies(['token']);
     const [shownWheels, setShownWheels] = useState([])
     const [isOpen, setIsOpen] = useState(false)
     const [wheelData, setWheelData] = useState(
@@ -32,11 +34,21 @@ const Motorcycle = ({loggedIn}) => {
 
         const id = path.split("/").pop();
 
-        fetch("http://192.168.1.232:5000/api/motorcycle/" + id)
-        .then(res => res.json())
-        .then((json) => {
-            if (!json) navigate("../../")
-            SetData(json)
+        fetch("http://192.168.1.232:5000/api/motorcycle/" + id, {
+            headers: {
+                authorization: cookies?.token
+            }
+        })
+        .then(res => {
+            if (res.status == 401) {
+                navigate("../../login")
+                window.location.href = ""
+            } else {
+                res.json()
+                .then((json) => {
+                    SetData(json)
+                })
+            }
         })
     }
 
@@ -49,14 +61,14 @@ const Motorcycle = ({loggedIn}) => {
 
     useEffect(() => {
         if (!loggedIn) {
-            navigate("../login")
+            navigate("../../")
         } else {
             GetData()
         }
     }, [])
     
     if (!loggedIn) {
-        return <Navigate replace to="../login" />;
+        return <Navigate replace to="../../" />;
     } else {
         return (
             <>
@@ -110,7 +122,7 @@ const Motorcycle = ({loggedIn}) => {
                         </button>
                     </div>
                     <div style={styles.rightContainer}>
-                        <WheelSearchBox shownWheels={shownWheels}/>
+                        <WheelSearchBox shownWheels={shownWheels} type={"Motorcycle"}/>
                     </div>
                 </div>
                 <CreateMotorcycleWheel isOpen={isOpen} setIsOpen={setIsOpen} setOriginalWheels={setOriginalWheels} setShownWheels={setShownWheels} motorcycle={motorcycle} wheelData={wheelData} setWheelData={setWheelData}/>
