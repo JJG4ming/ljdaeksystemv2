@@ -35,7 +35,7 @@ const CreateCar = ({isOpen, setIsOpen, setOriginalCars, setShownCars, customer, 
             model: carData.model,
             year: carData.year
         }
-        fetch("http://192.168.1.232:5000/api/car", {
+        fetch("http://10.10.60.84:5000/api/car", {
             method: "POST",
             headers: { 
                 'Content-Type': 'application/json',

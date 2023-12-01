@@ -37,7 +37,7 @@ const Car = ({loggedIn}) => {
 
         const id = path.split("/").pop();
 
-        fetch("http://192.168.1.232:5000/api/car/" + id, {
+        fetch("http://10.10.60.84:5000/api/car/" + id, {
             headers: {
                 authorization: cookies?.token
             }

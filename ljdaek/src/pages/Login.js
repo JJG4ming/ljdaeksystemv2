@@ -15,7 +15,7 @@ export default function Login() {
     }
 
     const CheckValidPassword = () => {
-        fetch("http://192.168.1.232:5000/api/auth", {
+        fetch("http://10.10.60.84:5000/api/auth", {
             method: "POST",
             headers: { 
                 'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ export default function Login() {
     useEffect(() => {
         var token = cookies.token
         if (token) {
-            fetch("http://192.168.1.232:5000/api/auth", {
+            fetch("http://10.10.60.84:5000/api/auth", {
                 headers: {
                     authorization: token
                 }

@@ -31,7 +31,7 @@ const CreateOrder = ({isOpen, setIsOpen, setOriginalOrders, setShownOrders, cust
             number: orderData.number,
             description: orderData.description,
         }
-        fetch("http://192.168.1.232:5000/api/order", {
+        fetch("http://10.10.60.84:5000/api/order", {
             method: "POST",
             headers: { 
                 'Content-Type': 'application/json',

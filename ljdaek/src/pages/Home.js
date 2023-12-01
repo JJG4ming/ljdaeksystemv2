@@ -43,7 +43,7 @@ const Homepage = ({loggedIn}) => {
     }
 
     const getCustomers = () => {
-        fetch("http://192.168.1.232:5000/api/customer", {
+        fetch("http://10.10.60.84:5000/api/customer", {
             headers: {
                 authorization: cookies?.token
             }
@@ -63,7 +63,7 @@ const Homepage = ({loggedIn}) => {
     }
 
     const getCars = () => {
-        fetch("http://192.168.1.232:5000/api/car", {
+        fetch("http://10.10.60.84:5000/api/car", {
             headers: {
                 authorization: cookies?.token
             }
@@ -83,7 +83,7 @@ const Homepage = ({loggedIn}) => {
     }
 
     const getMotorcycles = () => {
-        fetch("http://192.168.1.232:5000/api/motorcycle", {
+        fetch("http://10.10.60.84:5000/api/motorcycle", {
             headers: {
                 authorization: cookies?.token
             }
@@ -103,7 +103,7 @@ const Homepage = ({loggedIn}) => {
     }
 
     const getOrders = () => {
-        fetch("http://192.168.1.232:5000/api/order", {
+        fetch("http://10.10.60.84:5000/api/order", {
             headers: {
                 authorization: cookies?.token
             }
@@ -203,7 +203,7 @@ const Homepage = ({loggedIn}) => {
             address: address
         }
         console.log(tempCustomer)
-        fetch("http://192.168.1.232:5000/api/customer", {
+        fetch("http://10.10.60.84:5000/api/customer", {
             method: "POST",
             headers: { 
                 'Content-Type': 'application/json',

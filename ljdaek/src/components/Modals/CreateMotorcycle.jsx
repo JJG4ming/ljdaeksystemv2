@@ -37,7 +37,7 @@ const CreateMotorcycle = ({isOpen, setIsOpen, setOriginalMotorcycles, setShownMo
             year: motorcycleData?.year,
             abbreviation: motorcycleData?.abbreviation
         }
-        fetch("http://192.168.1.232:5000/api/motorcycle", {
+        fetch("http://10.10.60.84:5000/api/motorcycle", {
             method: "POST",
             headers: { 
                 'Content-Type': 'application/json',

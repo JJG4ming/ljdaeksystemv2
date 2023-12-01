@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from './pages/Login';
 import NoPage from './pages/NoPage';
-import Appointment from './pages/Appointment';
+import ActiveAppointment from './pages/ActiveAppointment';
 import Customer from './pages/Customer';
 import Home from './pages/Home'
 import Car from "./pages/Car"
 import Motorcycle from "./pages/Motorcycle";
-import Order from "./pages/Order";
+import Order from "./pages/Appointment";
 
 export default function App() {
 
@@ -19,7 +19,7 @@ export default function App() {
     const CheckLogin = () => {
         var token = cookies.token
         if (token) {
-            fetch("http://192.168.1.232:5000/api/auth", {
+            fetch("http://10.10.60.84:5000/api/auth", {
                 headers: {
                     authorization: token
                 }
@@ -54,7 +54,7 @@ export default function App() {
                 <Route path=":id" element={<Customer loggedIn={loggedIn}/>} />
             </Route>
             <Route path="login" element={<Login />} />
-            <Route path="appointments" element={<Appointment loggedIn={loggedIn}/>}/>
+            <Route path="appointments" element={<ActiveAppointment loggedIn={loggedIn}/>}/>
             <Route path="*" element={<NoPage loggedIn={loggedIn}/>} />
         </Routes>
     );

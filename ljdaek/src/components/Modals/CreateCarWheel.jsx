@@ -34,7 +34,7 @@ const CreateCarWheel = ({isOpen, setIsOpen, setOriginalWheels, setShownWheels, c
             alloy: wheelData.alloy,
             tpms: wheelData.tpms
         }
-        fetch("http://192.168.1.232:5000/api/carWheel", {
+        fetch("http://10.10.60.84:5000/api/carWheel", {
             method: "POST",
             headers: { 
                 'Content-Type': 'application/json',

@@ -33,7 +33,7 @@ const CreateMotorcycleWheel = ({isOpen, setIsOpen, setOriginalWheels, setShownWh
             tube: wheelData.tube,
         }
         console.log(tempWheel)
-        fetch("http://192.168.1.232:5000/api/motorcycleWheel", {
+        fetch("http://10.10.60.84:5000/api/motorcycleWheel", {
             method: "POST",
             headers: { 
                 'Content-Type': 'application/json',
